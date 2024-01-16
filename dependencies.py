@@ -19,10 +19,25 @@ def fetch_users():
 
 def get_user_emails():
     """Fetch user emails"""
-    users = db.fetch()
-    return [user['key'] for user in users.items]
+    return [user['key'] for user in db.fetch().items]
 
-print(get_user_emails())
+def get_usernames():
+    """"Fetch usernames"""
+    return [user['key'] for user in db.fetch().items]
+
+def validate_email(email):
+    """Check email validity"""
+    pattern = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
+    if re.match(pattern, email):
+        return True
+    return False
+
+def validate_username(username):
+    """Check email validity"""
+    pattern = "^[a-zA-Z0-9]*$"
+    if re.match(pattern, username):
+        return True
+    return False
 
 def sign_uo():
     with st.form(key='signup', clear_on_submit=True):
@@ -31,3 +46,7 @@ def sign_uo():
         username = st.text_input('Username', placeholder='Enter your username')
         password1 = st.text_input('Password', placeholder='Enter your password', type='password')
         password2 = st.text_input('Confirm password', placeholder='Confirm your password', type='password')
+
+        st.form_submit_button('Sign up')
+
+sign_uo()
