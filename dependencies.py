@@ -24,7 +24,7 @@ def get_user_emails():
 
 def get_usernames():
     """"Fetch usernames"""
-    return [user['key'] for user in db.fetch().items]
+    return [user['username'] for user in db.fetch().items]
 
 def validate_email(email):
     """Check email validity"""
@@ -57,7 +57,7 @@ def sign_up():
                                 if len(password1) >= 6:
                                     if password1 == password2:
                                         hashed_password = stauth.Hasher([password2]).generate()
-                                        insert_user(email, username, hashed_password)
+                                        insert_user(email, username, hashed_password[0])
                                         st.success('Account has been created')
                                         rain(
                                             emoji="✨",

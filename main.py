@@ -2,7 +2,7 @@ import streamlit as st
 import streamlit_authenticator as stauth
 from dependencies import sign_up, fetch_users
 
-st.set_page_config(page_title='Your personalised tracking app', page_icon='✨', initial_sidebar_state='collapsed')
+st.set_page_config(page_title='Your personalised tracking app', page_icon='✨', initial_sidebar_state='collapsed',)
 
 try:
     users = fetch_users()
@@ -15,9 +15,9 @@ try:
     for index in range(len(emails)):
         credentials['usernames'][usernames[index]] = {'name': emails[index], 'password': passwords[index]}
 
-    authenticator = stauth.Authenticate(credentials, cookie_name='OHVFSWBG', key='ecc992ba23ba5c3e', cookie_expiry_days=0)
+    Authenticator = stauth.Authenticate(credentials, cookie_name='OHVFSWBG', key='ecc992ba23ba5c3e', cookie_expiry_days=0)
 
-    email, authentication_status, username = authenticator.login('Login', 'main')
+    email, authentication_status, username = Authenticator.login('Login', 'main')
 
     info, info1 = st.columns(2)
 
