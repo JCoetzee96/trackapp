@@ -29,14 +29,17 @@ try:
             if authentication_status:
                 st.subheader('Home page')
                 st.markdown("""Created with ♥️ by Janke Coetzee""")
-                st.sidebar(f'Welcome {username}')
+                st.sidebar.subheader(f'Welcome {username}')
                 authenticator.logout('Log out', 'sidebar')
             elif authentication_status == False:
-                st.error('Incorrect username or password')
+                with info:
+                    st.error('Incorrect username or password')
             elif authentication_status == None:
-                st.warning('Sign in')
+                with info:
+                    st.warning('Sign in')
         else:
-            st.warning('Username does not exist')
+            with info:
+                st.warning('Username does not exist')
 
 except:
     st.success('Refresh page')
