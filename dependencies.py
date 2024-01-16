@@ -84,5 +84,3 @@ def sign_up():
 
         with bt3:
             st.form_submit_button('Sign up')
-
-sign_up()
