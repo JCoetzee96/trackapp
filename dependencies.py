@@ -4,6 +4,8 @@ import datetime
 import re
 from deta import Deta
 from streamlit_extras.let_it_rain import rain
+import secrets
+import string
 
 deta_key = "a0hkj1bnvev_7P3cA3n5tmGqFMu4zrqEHKrah9su9hJQ"
 deta = Deta(deta_key)
@@ -120,8 +122,42 @@ def forgotten_username():
         if email:
             if email in get_user_emails():
                 username = ' '.join(get_usernames())
+            else:
+                st.warning('The is no account with this email')
 
         if st.form_submit_button('Submit'):
-            st.text(f'Your username is {username}')
+            st.success(f'Your username is {username}')
 
-# def update_user()
+def generate_random_password(length=8):
+    password = (secrets.choice(string.ascii_uppercase) +
+                secrets.choice(string.ascii_lowercase) +
+                secrets.choice(string.digits) +
+                secrets.choice("±§!@€#$%^&*()_-+={}[]:;|\\<>,.?/"))
+    return ''.join(secrets.choice(password) for _ in range(length))
+
+def forgotten_password():
+    """Set a random password if forgotten"""
+    with st.form(key='forgotpassword', clear_on_submit=True):
+        st.subheader('Forgot password')
+        email = st.text_input('Email', placeholder='Enter your email')
+        username = st.text_input('Username', placeholder='Enter your username')
+
+        if email or username:
+            if email in get_user_emails() or username in get_usernames():
+                random_password = generate_random_password()
+                hashed_random_password = stauth.Hasher([random_password]).generate()
+
+                if email:
+                    username = ''.join(get_usernames())
+                    insert_user(email, username, hashed_random_password[0])
+                elif username:
+                    email = ''.join(get_user_emails())
+                    insert_user(email, username, hashed_random_password[0])
+
+            else:
+                st.error('Email or username invalid')
+
+        if st.form_submit_button('Submit'):
+
+            st.success(f'Your password has been reset to: {random_password}. \n'
+                       f'You can change your password after logging in.')
