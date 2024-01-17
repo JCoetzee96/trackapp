@@ -1,6 +1,6 @@
 import streamlit as st
 import streamlit_authenticator as stauth
-from dependencies import sign_up, fetch_users
+from dependencies import sign_up, fetch_users, forgotten_username
 
 st.set_page_config(page_title='Your personalised tracking app', page_icon='👾', initial_sidebar_state='collapsed',)
 
@@ -28,7 +28,9 @@ try:
 
     if not authentication_status:
         sign_up()
-        ## add function for forgotten username
+        st.divider()
+        forgotten_username()
+
         ## add function for forgotten password
 
     if username:

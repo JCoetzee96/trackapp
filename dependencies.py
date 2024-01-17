@@ -66,6 +66,7 @@ def validate_password(password):
     return False
 
 def sign_up():
+    """Sign up new user"""
     with st.form(key='signup', clear_on_submit=True):
         st.subheader('Sign up')
         email = st.text_input('Email', placeholder='Enter your email')
@@ -109,5 +110,18 @@ def sign_up():
 
         with bt3:
             st.form_submit_button('Sign up')
+
+def forgotten_username():
+    """Retrieve username with email"""
+    with st.form(key='forgotusername', clear_on_submit=True):
+        st.subheader('Forgot username')
+        email = st.text_input('Email', placeholder='Enter your email')
+
+        if email:
+            if email in get_user_emails():
+                username = ' '.join(get_usernames())
+
+        if st.form_submit_button('Submit'):
+            st.text(f'Your username is {username}')
 
 # def update_user()
