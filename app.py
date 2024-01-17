@@ -20,18 +20,23 @@ try:
         credentials['usernames'][usernames[index]] = {'name': emails[index], 'password': passwords[index]}
 
     Authenticator = stauth.Authenticate(credentials, cookie_name='OHVFSWBG', key='ecc992ba23ba5c3e', cookie_expiry_days=0)
-
+    st.title('Your personalised tracking app')
+    st.divider()
     email, authentication_status, username = Authenticator.login('Login', 'main')
 
     info, info1 = st.columns(2)
 
     if not authentication_status:
         sign_up()
+        ## add function for forgotten username
+        ## add function for forgotten password
 
     if username:
         if username in usernames:
             if authentication_status:
                 st.sidebar.subheader(f'Welcome {username}')
+                ## add option to reset password
+                ## add option to update personal info
                 Authenticator.logout('Log out', 'sidebar')
 
                 st.subheader('Home page')

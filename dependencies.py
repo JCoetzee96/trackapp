@@ -31,13 +31,38 @@ def validate_email(email):
     pattern = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
     if re.match(pattern, email):
         return True
+    st.warning('Invalid email')
     return False
 
 def validate_username(username):
-    """Check email validity"""
+    """Check username validity"""
     pattern = "^[a-zA-Z0-9]*$"
-    if re.match(pattern, username):
+    if re.match(pattern, username) and len(username) >= 4:
         return True
+    elif re.match(pattern, username) and len(username) <= 4:
+        st.warning('Username too short')
+    else:
+        st.warning('Invalid username')
+    return False
+
+def validate_password(password):
+    """Check password validity"""
+    if len(password) >= 8:
+        if any(char.isdigit() for char in password):
+            if any(char.isupper() for char in password):
+                if any(char.islower() for char in password):
+                    if any(char in "±§!@€#$%^&*()_-+={}[]:;|\\<>,.?/" for char in password):
+                        return True
+                    else:
+                        st.warning('Password must contain a special character')
+                else:
+                    st.warning('Password must contain at least one lowercase letter')
+            else:
+                st.warning('Password must contain at least one capital letter')
+        else:
+            st.warning('Password must contain a number')
+    else:
+        st.warning('Password too short')
     return False
 
 def sign_up():
@@ -51,36 +76,38 @@ def sign_up():
         if email:
             if validate_email(email):
                 if email not in get_user_emails():
-                    if validate_username(username):
-                        if username not in get_usernames():
-                            if len(username) >= 2:
-                                if len(password1) >= 6:
-                                    if password1 == password2:
-                                        hashed_password = stauth.Hasher([password2]).generate()
-                                        insert_user(email, username, hashed_password[0])
-                                        st.success('Account has been created')
-                                        rain(
-                                            emoji="✨",
-                                            font_size=54,
-                                            falling_speed=5,
-                                            animation_length="infinite",
-                                        )
+                    if username:
+                        if validate_username(username):
+                            if username not in get_usernames():
+                                if password1:
+                                    if password2:
+                                        if password1 == password2:
+                                            if validate_password(password2):
+                                                hashed_password = stauth.Hasher([password2]).generate()
+                                                insert_user(email, username, hashed_password[0])
+                                                st.success('Account has been created')
+                                                rain(
+                                                    emoji="✨",
+                                                    font_size=54,
+                                                    falling_speed=5,
+                                                    animation_length=5,
+                                                )
+                                        else:
+                                            st.warning('Passwords do not match')
                                     else:
-                                        st.warning('Passwords do not match')
+                                        st.warning('Confirm your password')
                                 else:
-                                    st.warning('Password too short')
+                                    st.warning('Enter a password')
                             else:
-                                st.warning('Username too short')
-                        else:
-                            st.warning('Username already exists')
+                                st.warning('Username already exists')
                     else:
-                        st.warning('Invalid username')
+                        st.warning('Enter a username')
                 else:
                     st.warning('Email already exists')
-            else:
-                st.warning('Invalid email')
 
         bt1, bt2, bt3, bt4, bt5 = st.columns(5)
 
         with bt3:
             st.form_submit_button('Sign up')
+
+# def update_user()
