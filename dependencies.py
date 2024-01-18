@@ -1,3 +1,4 @@
+import bcrypt
 import streamlit as st
 import streamlit_authenticator as stauth
 import datetime
@@ -172,15 +173,15 @@ def reset_password(username, email):
             new_password2 = st.text_input('Confirm new password', placeholder='Confirm your new password', type='password')
 
             if current_password:
-                if current_password in [user['password'] for user in db.fetch().items]:
+                if bcrypt.checkpw("3kk$33kk".encode('utf-8'), [user['password'] for user in db.fetch().items][0].encode()):
                     if new_password1 == new_password2:
                         if validate_password(new_password2):
                             hashed_password = stauth.Hasher([new_password2]).generate()
                             insert_user(email, username, hashed_password[0])
+                            st.success('Password has been reset')
                     else:
                         st.warning("New passwords don't match")
                 else:
                     st.warning('Password incorrect')
 
-            if st.form_submit_button('Submit'):
-                st.success('Password has been reset')
+            st.form_submit_button('Submit')
