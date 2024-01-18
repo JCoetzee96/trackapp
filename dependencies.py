@@ -161,3 +161,26 @@ def forgotten_password():
 
             st.success(f'Your password has been reset to: {random_password}. \n'
                        f'You can change your password after logging in.')
+
+def reset_password(username, email):
+    """Reset password"""
+    with st.expander("Reset password"):
+        with st.form('Reset password'):
+            st.subheader('Reset password')
+            current_password = st.text_input('Current password', placeholder='Enter your current password', type='password')
+            new_password1 = st.text_input('New password', placeholder='Enter your new password', type='password')
+            new_password2 = st.text_input('Confirm new password', placeholder='Confirm your new password', type='password')
+
+            if current_password:
+                if current_password in [user['password'] for user in db.fetch().items]:
+                    if new_password1 == new_password2:
+                        if validate_password(new_password2):
+                            hashed_password = stauth.Hasher([new_password2]).generate()
+                            insert_user(email, username, hashed_password[0])
+                    else:
+                        st.warning("New passwords don't match")
+                else:
+                    st.warning('Password incorrect')
+
+            if st.form_submit_button('Submit'):
+                st.success('Password has been reset')

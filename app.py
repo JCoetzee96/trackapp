@@ -1,6 +1,6 @@
 import streamlit as st
 import streamlit_authenticator as stauth
-from dependencies import sign_up, fetch_users, forgotten_username, forgotten_password
+from dependencies import sign_up, fetch_users, forgotten_username, forgotten_password, reset_password
 
 st.set_page_config(page_title='Your personalised tracking app', page_icon='👾', initial_sidebar_state='collapsed',)
 
@@ -44,10 +44,12 @@ try:
     if username:
         if username in usernames:
             if authentication_status:
-                st.sidebar.subheader(f'Welcome {username}')
-                ## add option to reset password
-                ## add option to update personal info
-                Authenticator.logout('Log out', 'sidebar')
+                with st.sidebar:
+                    st.subheader(f'Welcome {username}')
+                    st.divider()
+                    reset_password(username, email)
+                    ## add option to update personal info
+                    Authenticator.logout('Log out', 'sidebar')
 
                 st.subheader('Home page')
                 st.markdown("""Created with ♥️ by Janke Coetzee""")
